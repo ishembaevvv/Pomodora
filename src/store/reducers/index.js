@@ -24,20 +24,24 @@ export const rootReducers = (state = inatialState, action) => {
           return {
             ...state,
             isPlaying: true,
-            minutes: state.minutes - 1,
             second: 59,
+            minutes:
+              state.minutes <= 0 ? (state.isPlaying = 0) : state.minutes - 1,
           };
         }
       }
     case DECREASE_SECOND:
-      return {
-        ...state,
-        second: state.second <= 0 ? (state.second = 59) : state.second - 1,
-      };
+      if (state.second >= 0) {
+        return { ...state, second: state.second - 1 };
+      } else if (state.minutes <= 0) {
+        if (state.second <= 0) {
+          return { ...state, second: (state.second = 0), isPlaying: false };
+        }
+      }
     case DECREASE_MINUTES:
       return {
         ...state,
-        minutes: state.minutes - 1,
+        minutes: state.minutes <= 0 ? (state.isPlaying = 0) : state.minutes - 1,
       };
     case WORK:
       return {

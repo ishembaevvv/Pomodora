@@ -10,6 +10,8 @@ import {
   work,
 } from "../../store/actions";
 import { useEffect } from "react";
+import sound from "../../theend.mp3";
+import useSound from "use-sound";
 
 export default function Pomodora() {
   // hooks
@@ -45,15 +47,15 @@ export default function Pomodora() {
     return () => clearInterval(interval);
   }, [isPlaying, dispatch]);
 
+  // for sound effects
+  const [play] = useSound(sound);
+
+  const PlaySound = () => {
+    if (formMin <= 0 && formSec <= 0) play();
+  };
+
   return (
-    <div
-      className="bg-sky-600 py-5 rounded-lg flex flex-col text-center items-center gap-5"
-      style={
-        minutes <= 0
-          ? { backgroundColor: "red" }
-          : { backgroundColor: "#0284C7" }
-      }
-    >
+    <div className="bg-sky-600 py-5 rounded-lg flex flex-col text-center items-center gap-5">
       <div className="flex gap-2">
         <button
           className="rounded-md w-28 transition-all focus:bg-blue-700 hover:bg-blue-700"
@@ -76,6 +78,7 @@ export default function Pomodora() {
       </div>
       <span className="text-6xl">
         {formMin}:{formSec}
+        {PlaySound()}
       </span>
       <div>
         <button
